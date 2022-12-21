@@ -1,0 +1,24 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH Ica (high
+% threshold acticated Ca2+
+
+% parameters
+gca=0.54
+eca=120
+rtau=420
+
+%functions
+qinf(X)=1./(exp(-(X+24.6)./11.3)+1)
+qtau(X)=1.25.*2./(exp(-0.031.*(X+37.1)) + exp(0.031.*(X+37.1)))
+rinf(X)=1./(exp((X+12.6)./18.9)+1)
+
+ICa(X,q,r) = gca.*q.^2.*r.*(X-eca)
+
+%ODEs and initial conditions
+q'=(qinf(X)-q)./qtau(X)
+r'=(rinf(X)-r)./rtau
+q(0)=0.01
+r(0)=0.01
+monitor functions
+%linkers
+@current += -ICa(X,q,r)
+@ihca += ICa(X,q,r)

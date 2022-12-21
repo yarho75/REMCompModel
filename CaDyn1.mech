@@ -1,0 +1,16 @@
+% cai: calcium buffer dynamics for KCa current
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters
+f1 = 0.7 % 0.7 for kca, 0.024 for sAHP
+tauca1=1 % 1 for kca, 1000 for sAHP [ms]
+scl = 10 
+Far=96485 	
+vol=1
+carest=.00024 %5.0000e-05 % mM/L
+
+% ODEs
+cai1' = -(f1.*@ihca.*scl)./(2*Far*vol)+(carest-cai1)./tauca1
+cai1(0) = .0001
+
+% Interface
+@cai1 += cai1

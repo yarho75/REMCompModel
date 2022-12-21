@@ -1,0 +1,15 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH leak current
+% parameters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters(gl=0.00034 old value)
+
+gl = .034 	% mS/cm2, maximal conductance 
+el = -75 	% mV, passive reversal potential
+% Note: passive taum=Cm*Rm=Cm/gpas. cell resonates at 1/taum. RMP~epas.
+
+% Functions
+Ileak(X)=-gl.*(X-el)
+
+% Linkers
+@current += Ileak(X)
+

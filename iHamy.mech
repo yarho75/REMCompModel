@@ -1,0 +1,20 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH H-current
+
+% parameters
+gh=0.1
+eh=-43
+IC = 0
+IC_noise = 0
+ 
+%functions
+hhinf(X)=1./(exp((X+89.2)./9.5)+1)
+hhtau(X)=1727.*exp(0.019.*X)
+
+Ih(X,hh) = -gh.*hh.*(X-eh)
+monitor functions
+%ODEs and initial conditions
+hh'=(hhinf(X)-hh)/hhtau(X)
+hh(0)=IC+IC_noise.*rand(1,Npop)
+
+%linkers
+@current += Ih(X,hh)

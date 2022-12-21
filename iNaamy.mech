@@ -1,0 +1,28 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH Na
+% parameters
+gna=120 % max sodium conductance
+ena=45
+
+% functions
+a_m(X)=-0.2816.*(X+25)./(exp(-(X+25)./9.3)-1)
+b_m(X)=0.2464.*(X-2)./(exp((X-2)./6)-1)
+a_h(X)=0.098.*exp(-(X+40.1)./20)
+b_h(X)=1.4./(exp(-(X+10.1)./10)+1)
+
+minf(X)=a_m(X)./(a_m(X)+b_m(X))
+mtau(X)=1./(a_m(X)+b_m(X))
+hinf(X)=a_h(X)./(a_h(X)+b_h(X))
+htau(X)=1./(a_h(X)+b_h(X))
+
+INa(X,m,h) = -gna.*m.^3.*h.*(X-ena) % [mS]*[mV]=[microA]
+
+% ODEs and ICs
+m'=(minf(X)-m)./mtau(X)
+h'=(hinf(X)-h)./htau(X)
+
+h(0)=1;%h_IC+IC_noise*rand(1,Npop)
+m(0)=0.0001;%m_IC+IC_noise*rand(1,Npop)
+
+% linkers
+@current += INa(X,m,h)
+

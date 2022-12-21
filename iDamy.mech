@@ -1,0 +1,23 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH Na
+% parameters
+
+gd=1 % max Mcurrent conductance
+dptau=1.5
+dqtau=569
+ek=-80
+% functions
+dpinf(X)=1./(exp(-(X+8.6)/11.1)+1)
+dqinf(X)=1./(exp((X+21)/9)+1)
+
+ID(X,dp,dq)= -gd.*dp.*dq.*(X-ek) % [mS]*[mV]=[microA]
+monitor functions
+
+% ODEs and ICs
+dp'=(dpinf(X)- dp)./dptau
+dq'=(dqinf(X)- dq)./dqtau
+dp(0)=.1;%h_IC+IC_noise*rand(1,Npop)
+dq(0)=0.01
+
+% linkers
+@current += ID(X,dp,dq)
+

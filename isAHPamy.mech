@@ -1,0 +1,22 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH DR K current
+% parameters
+gahp=0.1 % max potassium conductance
+ek=-80
+ahptau=48
+
+% functions
+a_ahp(@cai2)=0.0048./exp(-5.*log10(1000.*@cai2)+17.5)
+b_ahp(@cai2)=0.012./exp(2.*log10(1000.*@cai2)+20)
+
+ahpinf(@cai2)=a_ahp(@cai2)./(a_ahp(@cai2)+b_ahp(@cai2))
+
+IAHP(X,ahp) = -gahp.*ahp.*(X-ek) % [mS/cm2]*[mV]=[microA/cm2]
+
+monitor functions
+% ODEs and ICs
+ahp'=(ahpinf(@cai2)-ahp)./ahptau
+ahp(0)=0.0001
+
+% linkers
+@current += IAHP(X,ahp)
+

@@ -1,0 +1,22 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH Na
+% parameters
+gkca=0.5 % max sodium conductance
+ek=-80
+
+% functions
+Vm(X,@cai1)=X+40.*log10(1000.*@cai1)
+a_kc(X,@cai1)=-0.00642.*(Vm(X,@cai1)+17.94)./(exp(-(Vm(X,@cai1)+18)./12)-1)
+b_kc(X,@cai1)=1.7.*exp(-(Vm(X,@cai1)+152)./30)
+
+kcinf(X,@cai1)=a_kc(X,@cai1)./(a_kc(X,@cai1)+b_kc(X,@cai1))
+kctau(X,@cai1)=max(1./(a_kc(X,@cai1)+b_kc(X,@cai1)),1.1)
+
+IKCA(X,kc) = -gkca.*kc.^2.*(X-ek) % [mS/cm2]*[mV]=[microA/cm2]
+
+monitor functions
+% ODEs and ICs
+kc'=(kcinf(X,@cai1)-kc)./kctau(X,@cai1)
+kc(0)=0.0001
+
+% linkers
+@current += IKCA(X,kc)

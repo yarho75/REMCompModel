@@ -1,0 +1,21 @@
+% Papoutsi A, et al Front Neural Circuits (2013) & PLoS Comput Biol (2014)
+
+%parameters
+gh = 0.002 %mS/cm2: .0072 in soma(Papoutsi A, 2013)
+eh = -10 
+K = 10 %mV
+vhalf = -90 % mV
+IC = 0
+IC_noise = 0
+ 
+ninf(X) = 1-(1./(1+exp((vhalf-X)/K)))
+taun(X) = (X>-10).*(1) + (X<-10).*(2*(1./(exp((X+145)/-17.5)+exp((X+16.8)/16.5))+10))
+%taun(X) = 1.5*(exp(0.033*(X+75))./(0.011*(1+exp(0.083*(X+75)))));
+ih(X,n) = gh.*n.*(X-eh)
+
+ monitor functions
+%ODEs and initial conditions
+n' = (ninf(X)-n)./taun(X)
+n(0) = IC+IC_noise.*rand(1,Npop)
+ 
+@current += -ih(X,n)

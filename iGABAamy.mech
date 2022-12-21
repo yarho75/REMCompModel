@@ -1,0 +1,24 @@
+% Amygdala network: iGABA: synaptic current,
+% parameters
+gGaba = [0.]		% mS/cm2, maximal conductance
+egaba = [-75]		% mV, reversal potential:-60 for interneuron
+Gtau1 = [0.25]	% ms, rise time constant
+Gtau2 = [3.75]	% ms, decay time constant
+IC = [0]
+IC_noise = [0]
+
+IC+IC_noise*rand(1,N_pre)
+% fixed variables
+netcon = ones(N_pre,N_post) % default connectivity matrix (all-to-all)
+
+% functions
+IGABA(X,s) = (gGaba.*(s*netcon).*(X-egaba))
+ 
+% ODEs and ICs
+s' = -s./Gtau2 + 2.*(1+tanh(X_pre/4)).*((1-s)/Gtau1)
+s(0) = IC+IC_noise.*rand(1,N_pre)
+
+monitor functions % always record the synaptic current
+ 
+% linkers
+@current += -IGABA(X_post,s)

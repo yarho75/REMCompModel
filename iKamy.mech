@@ -1,0 +1,21 @@
+% Principle neuron in the LA based on Li's paper, 2009 HH DR K current
+% parameters
+gk=12 % max potassium conductance
+ek=-80
+
+% functions
+a_n(X)=-0.036.*(X-13)./(exp(-(X-13)./25)-1)
+b_n(X)=0.0108.*(X-23)./(exp((X-23)./12)-1)
+
+ninf(X)=a_n(X)./(a_n(X)+b_n(X))
+ntau(X)=1./(a_n(X)+b_n(X))
+
+IK(X,n) = -gk.*n.^4.*(X-ek) % [mS]*[mV]=[microA]
+
+% ODEs and ICs
+n'=(ninf(X)-n)./ntau(X)
+n(0)=0;%n_IC+IC_noise*rand(1,Npop)
+
+% linkers
+@current += IK(X,n)
+

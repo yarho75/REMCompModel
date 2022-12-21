@@ -1,0 +1,19 @@
+% cai: calcium buffer dynamics for AMPA hebbian
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters
+carest=5.0000e-05 	 % mM, equilibrium Ca2+ concentration
+tauca3 = 50	 % ms, decay time constant
+Vol=1;  	 % volume of shell for Ca2+ diffusion
+Far=96485 
+f3 = 0.024
+scl = 10
+IC=0.8
+IC_noise=0
+
+% ODEs
+cai3' = -(f3.*@ihb.*scl)./(2*Far*Vol)+(carest-cai3)./tauca3
+cai3(0) = IC+IC_noise.*rand(1,N_post)
+
+% Interface
+@cai3 += cai3
+

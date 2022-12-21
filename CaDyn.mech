@@ -1,0 +1,17 @@
+% cai: calcium buffer dynamics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters
+f = 0.7 % 0.7 for kca, 0.024 for sAHP
+tauca=1 % 1 for kca, 1000 for sAHP [ms]
+scl = 1e4 
+Far=96485 	
+vol=1
+carest=50e-6
+
+% ODEs
+cai' = -(f.*@ica.*scl)./(2*Far*vol)+(carest-cai)./tauca
+%cai' = -CAF.*@ica./(faraday*VshellCa)+(cainf-cai)./tauCa
+cai(0) = 1
+
+% Interface
+@cai += cai

@@ -1,0 +1,26 @@
+%Kole, et al J Neurosci (2006) & PLoS Comput Biol (2014)
+
+%parameters
+gH = 0.01 %mS/cm2: .15 (Kole, 2006)
+eh = -45
+IC = 0
+IC_noise = 0
+
+alpha(X) = 0.001*6.43.*(X+154.9)/(exp((X+154.9)./11.9)-1)
+beta(X) = 0.001*193*exp(X./33.1)
+
+ninf(X) = alpha(X)./(alpha(X) + beta(X))
+taun(X) = 1./(alpha(X) + beta(X))
+ih(X,n) = -gH.*n.*(X-eh)
+		 
+monitor functions
+%ODEs and initial conditions
+n' = (ninf(X)-n)./taun(X)
+n(0) = IC+IC_noise.*rand(1,Npop) 
+
+@current += ih(X,n)
+
+%ninf(X) = 1-(1./(1+exp((vhalf-X)/K)))
+%taun(X) = (X>-10).*(1) + (X<-10).*(2*(1./(exp((X+145)/-17.5)+exp((X+16.8)/16.5))+10))
+%taun(X) = 1.5*(exp(0.033*(X+75))./(0.011*(1+exp(0.083*(X+75)))));
+

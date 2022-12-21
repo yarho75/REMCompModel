@@ -1,0 +1,26 @@
+% Amygdala network: iAMPA: synaptic current, 
+
+gAmpa = [0.1] 	 % nS, maximal conductance
+eampa = [0] 	 % mV, reversal potential
+Atau1= [0.5]	 %[0.4]j tauAMPAr :rise time constant: 0.5for pry, 0.3for interneuron
+Atau2 = [7]   %[2]y % tauAMPAd:decay time constant: 7ms for pyramidal, 2.4for interneuron
+IC = [0]
+IC_noise = [0]
+
+% fixed variables
+netcon = ones(N_pre,N_post) % default connectivity matrix (all-to-all)
+
+% functions
+IAMPA(X,s) = (gAmpa.*(s*netcon).*(X-eampa))
+ 
+% ODEs and ICs
+s' = -s./Atau2 + 5.*(1+tanh(X_pre/4)).*((1-s)/Atau1)
+s(0) = IC+IC_noise.*rand(1,N_pre) 
+
+%IC+IC_noise.*rand(1,N_pre)
+
+monitor functions % always record the synaptic current
+
+% linkers
+@current += -IAMPA(X_post,s)
+

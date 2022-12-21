@@ -1,0 +1,23 @@
+% poisson noise with time scaling
+% Istim(t): tonic stimulus
+%stim_amp=10
+%onset=0 	% onset [ms] of stimulation
+%offset=inf	% offset [ms] of stimulation
+%Istim(t) = stim_amp*(t>=onset & t<offset)`
+%@current += Istim(t)
+
+mf=5 %Hz
+amp=1
+tau_iexc=3
+norm=sqrt(2/tau_iexc)
+%noise_amp=1 % units: 1/sqrt(ms)
+
+iexc' = -1/tau_iexc*iexc+norm.*randn(1,N_pop)
+iexc(0)=0
+Insin(t)=amp*(sin(2*pi*0.001*mf*t)+iexc);
+
+%Insin(t)=amp*sin(2*pi*mf*t)+noise_amp.*randn(1,N_pop).*sqrt(0.01);
+monitor functions
+
+@current += Iexc(t)
+

@@ -1,0 +1,18 @@
+% cai: calcium buffer dynamics for KCa current
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Parameters
+% 0.7 for kca, 0.024 for sAHP
+carest=.00024 %5.0000e-05 	 % mM, equilibrium Ca2+ concentration
+tauca2 = 500	 % ms, decay time constant
+Vol=1;  	 % volume of shell for Ca2+ diffusion
+Far=96485 
+f2 = 0.024
+scl = 10 
+
+% ODEs
+cai2' = -(f2.*@ihca.*scl)./(2*Far*Vol)+(carest-cai2)./tauca2
+cai2(0) = 0.0001
+
+% Interface
+@cai2 += cai2
+

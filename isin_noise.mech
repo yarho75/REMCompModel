@@ -1,0 +1,67 @@
+% sin input with Gaussian noise with time scaling
+% Istim(t): tonic stimulus
+%stepi time
+onoff=0;
+
+% onset [ms] of stimulation: 500ms w/1sec int
+onset1=2000*onoff
+onset2=3500*onoff
+onset3=5000*onoff
+onset4=6500*onoff
+onset5=8000*onoff
+onset6=9500*onoff
+onset7=11000*onoff
+onset8=12500*onoff
+onset9=14000*onoff
+onset10=0
+% offset [ms] of stimulation
+offset1=2500*onoff
+offset2=4000*onoff
+offset3=5500*onoff
+offset4=7000*onoff
+offset5=8500*onoff	
+offset6=10000*onoff
+offset7=11500*onoff
+offset8=13000*onoff
+offset9=14500*onoff
+offset10=0
+%---------------------------------------------------------------------------------
+stim_amp=0
+sin_amp=0
+sinNorm=7.2260e+86 %200:7.2260e+86, 100:2.6881e+43
+noise_amp=0 % units: 1/sqrt(ms)
+mf=0 %Hz
+tau_iexc=5
+iexc_avg=0
+norm=sqrt(2/tau_iexc)
+iexc(0)=0
+numAssems=0
+targetAssem1=0
+targetAssem2=0
+numtarget=1
+%dumN=ones(1,N_pop)
+totN_pop=N_pop
+
+upNpop=generateNpopVector(totN_pop,numAssems,numtarget,targetAssem1,targetAssem2);
+iexc' = -1/tau_iexc*(iexc-iexc_avg)+norm.*randn(1,totN_pop)
+
+% Original external input used in our network
+Istim(t) = noise_amp*iexc + (exp(sin_amp*sin(pi*t*0.001*mf).^2)-1)./sinNorm.*upNpop + (stim_amp*(t>=onset1 & t<offset1)+stim_amp*(t>=onset2 & t<offset2) + stim_amp*(t>=onset3 & t<offset3) + stim_amp*(t>=onset4 & t<offset4)+stim_amp*(t>=onset5 & t<offset5) + stim_amp*(t>=onset6 & t<offset6) + stim_amp*(t>=onset7 & t<offset7)+stim_amp*(t>=onset8 & t<offset8) + stim_amp*(t>=onset9 & t<offset9) + stim_amp*(t>=onset10 & t<offset10)).*upNpop
+@current += Istim(t)
+
+monitor functions
+
+%gSin=0.02
+%eampa=0
+%Istim(t) = noise_amp*iexc + (sin_amp+sin_amp*sin(2*pi*0.001*mf*t)).*upNpop + (stim_amp*(t>=onset1 & t<offset1)+stim_amp*(t>=onset2 & t<offset2) + stim_amp*(t>=onset3 & t<offset3) + stim_amp*(t>=onset4 & t<offset4)+stim_amp*(t>=onset5 & t<offset5) + stim_amp*(t>=onset6 & t<offset6) + stim_amp*(t>=onset7 & t<offset7)+stim_amp*(t>=onset8 & t<offset8) + stim_amp*(t>=onset9 & t<offset9) + stim_amp*(t>=onset10 & t<offset10)).*upNpop
+%Istim(t) = noise_amp*iexc + (sin_amp+sin_amp*sin(2*pi*0.001*mf*t)).*upNpop + (stim_amp1*(t>=onset1 & t<offset1)+stim_amp2*(t>=onset2 & t<offset2) + stim_amp3*(t>=onset3 & t<offset3) + stim_amp4*(t>=onset4 & t<offset4)+stim_amp5*(t>=onset5 & t<offset5) + stim_amp6*(t>=onset6 & t<offset6) + stim_amp7*(t>=onset7 & t<offset7)+stim_amp8*(t>=onset8 & t<offset8) + stim_amp9*(t>=onset9 & t<offset9) + stim_amp10*(t>=onset10 & t<offset10)).*upNpop
+%functions
+% external stim via Synaptic I
+%istimtmp(t) =gSin.*(noise_amp*iexc + (exp(sin_amp*sin(pi*t*0.001*mf).^2)-1)./sinNorm.*upNpop + (stim_amp*(t>=onset1 & t<offset1)+stim_amp*(t>=onset2 & t<offset2) + stim_amp*(t>=onset3 & t<offset3) + stim_amp*(t>=onset4 & t<offset4)+stim_amp*(t>=onset5 & t<offset5) + stim_amp*(t>=onset6 & t<offset6) + stim_amp*(t>=onset7 & t<offset7)+stim_amp*(t>=onset8 & t<offset8) + stim_amp*(t>=onset9 & t<offset9) + stim_amp*(t>=onset10 & t<offset10)).*upNpop)
+%Istim(X)= -istimtmp(t).*(X-eampa)
+%@current += Istim(X)
+
+%istimtmp(t) =gSin.*((exp(sin_amp*sin(pi*t*0.001*mf).^2)-1)./sinNorm.*upNpop + (stim_amp*(t>=onset1 & t<offset1)+stim_amp*(t>=onset2 & t<offset2) + stim_amp*(t>=onset3 & t<offset3) + stim_amp*(t>=onset4 & t<offset4)+stim_amp*(t>=onset5 & t<offset5) + stim_amp*(t>=onset6 & t<offset6) + stim_amp*(t>=onset7 & t<offset7)+stim_amp*(t>=onset8 & t<offset8) + stim_amp*(t>=onset9 & t<offset9) + stim_amp*(t>=onset10 & t<offset10)).*upNpop)
+%Istim(X,t)= -istimtmp(t).*(X-eampa) + noise_amp*iexc
+%@current += Istim(X,t)
+
