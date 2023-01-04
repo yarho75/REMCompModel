@@ -786,9 +786,9 @@ sin_ampILon=0;%<-------------- sharp peak having a specific frequency
 sin_ampPL=sin_ampPLon*Ad*1e-5; sin_ampPLFS=sin_ampPLon*Afs*1e-5;
 sin_ampIL=sin_ampILon;sin_ampILFS=sin_ampILon;
 sin_NormIL=7.2260e+86/(sin_scl*Ad*1e-5);sin_NormFS=7.2260e+86/(sin_scl*Afs*1e-5);
-dum_fB=0;dum_f=0;
+dum_fB=0;dum_f=4;
 
-targetAssemPL=0;targetAssemIL=0;
+targetAssemPL=0;targetAssemIL=4;
 targetAssemB=0;targetAssemBint=0;
 
 % Ed:idc=.485:5hz(~7hz w/netw), .6:20hz
@@ -806,7 +806,7 @@ vary={'EPLd','Iapp',0.4705;'EPLd','noise_amp',noise_amp;'EPLd','iexc_avg',iexc_a
     'intd','Iapp',3.;'intd','noise_amp',noise_ampB;'intd','iexc_avg',iexc_avg;'intd','sin_amp',sin_ampB;'intd','mf',dum_fB;
     'ints','numAssems',numAssemsBint;'intd','numAssems',numAssemsBint;'intd','targetAssem',targetAssemBint};
 
-tend=1000;
+tend=2;
 tspan=[0 tend];dt=.01;  % [beg end], ms
 solver_options={'tspan',tspan,'solver','euler','dt',dt,'matCompatibility_flg',0,'verbose_flag',1,'parfor_flag',0};
 
@@ -837,7 +837,7 @@ for i = 1:length(state_variables)
     end
 end
 
-tend=10000;
+tend=10;
 tspan=[0 tend];dt=.01;  % [beg end], ms
 solver_options={'tspan',tspan,'solver','euler','dt',dt,'matCompatibility_flg',0,'verbose_flag',1,'parfor_flag',0};
 fdatnam=['BLAPLIL_REM_10sec']; % PFC(ILPL) and BLA connected
@@ -880,8 +880,8 @@ save(fdatnam,'data_pAd_v','data_pCd_v','data_intd_v','data_time','data_EPLd_v','
     'EILd_pAs_STDP_Isyn_w','EILd_pCs_STDP_Isyn_w','pAd_EILs_STDP_Isyn_w','pCd_EILs_STDP_Isyn_w',...
     'intd_EILs_STDP_Isyn_w','intd_pAs_STDP_Isyn_w','intd_pCs_STDP_Isyn_w',...
     'KACee','KAee','KAei','KAie','KBAILee','KBAPLee','KBCILee','KBCPLee','Kbii','KCAee','KCee','KCei','KCie',...
-    'KILBAee','KILBCee','KILBIei','KILee','KILei','KILie','KILii','KILPLee','sin_ampB','sin_ampPLon','sin_ampILon',...
-    'KPLBAee','KPLBCee','KPLee','KPLei','KPLie','KPLii','KPLILee','vary','spec','spectmp','spectmpBLA','spectmpORI',...
+    'KILBAee','KILBCee','KILBIei','KILee','KILei','KILie','KILii','sin_ampB','sin_ampPLon','sin_ampILon',...
+    'KPLBAee','KPLBCee','KPLee','KPLei','KPLie','KPLii','vary','spec','spectmp','spectmpBLA','spectmpORI',...
     'numAssems','numAssemsB','numAssemsBint','NPLe','NPLi','NILe','NILi','NpA','NpC','Nbi','KAei_stdp','KCei_stdp',...
     'solver_options','Wdum','ic','ic1','-v7.3');
 
